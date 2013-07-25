@@ -89,6 +89,7 @@ LOCAL_SRC_FILES:=                         \
         XINGSeeker.cpp                    \
         avc_utils.cpp                     \
         APE.cpp                           \
+        FFMPEGSoftCodec.cpp               \
 
 LOCAL_C_INCLUDES:= \
         $(TOP)/frameworks/av/include/media/ \
@@ -185,6 +186,9 @@ ifeq ($(BOARD_USE_SAMSUNG_CAMERAFORMAT_NV21), true)
 # const char CameraParameters::PIXEL_FORMAT_YUV420SP_NV21[] = "nv21";
 LOCAL_CFLAGS += -DUSE_SAMSUNG_CAMERAFORMAT_NV21
 endif
+
+# FFMPEG plugin
+LOCAL_C_INCLUDES += $(TOP)/external/stagefright-plugins/include
 
 LOCAL_MODULE:= libstagefright
 
