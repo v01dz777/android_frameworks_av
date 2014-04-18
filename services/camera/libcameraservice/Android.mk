@@ -80,6 +80,7 @@ LOCAL_EXPORT_C_INCLUDE_DIRS := \
 
 LOCAL_CFLAGS += -Wall -Wextra -Werror
 
+
 ifeq ($(TARGET_HAS_LEGACY_CAMERA_HAL1),true)
     LOCAL_CFLAGS += -DNO_CAMERA_SERVER
 endif
@@ -90,6 +91,10 @@ endif
 
 ifeq ($(BOARD_NEEDS_MEMORYHEAPION),true)
     LOCAL_CFLAGS += -DUSE_MEMORY_HEAP_ION
+endif
+
+ifneq ($(BOARD_NUMBER_OF_CAMERAS),)
+    LOCAL_CFLAGS += -DMAX_CAMERAS=$(BOARD_NUMBER_OF_CAMERAS)
 endif
 
 LOCAL_MODULE:= libcameraservice
