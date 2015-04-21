@@ -179,8 +179,10 @@ status_t Converter::initEncoder() {
         mOutputFormat->setInt32("frame-rate", frameRate);
         mOutputFormat->setInt32("i-frame-interval", 15);  // Iframes every 15 secs
 
+#ifndef BOARD_NO_INTRA_MACROBLOCK_MODE_SUPPORT
         // Configure encoder to use intra macroblock refresh mode
         mOutputFormat->setInt32("intra-refresh-mode", OMX_VIDEO_IntraRefreshCyclic);
+#endif
 
         int width, height, mbs;
         if (!mOutputFormat->findInt32("width", &width)
