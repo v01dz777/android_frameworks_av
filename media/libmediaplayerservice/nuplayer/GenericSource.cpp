@@ -128,6 +128,7 @@ status_t NuPlayer::GenericSource::setDataSource(
 
 status_t NuPlayer::GenericSource::setDataSource(const sp<DataSource>& source) {
     resetDataSource();
+    Mutex::Autolock _l(mSourceLock);
     mDataSource = source;
     return OK;
 }
@@ -393,6 +394,7 @@ void NuPlayer::GenericSource::onPrepareAsync() {
                 }
             }
 
+            Mutex::Autolock _l(mSourceLock);
             mDataSource = DataSource::CreateFromURI(
                    mHTTPService, uri, &mUriHeaders, &contentType,
                    static_cast<HTTPBase *>(mHttpSource.get()),
@@ -400,6 +402,7 @@ void NuPlayer::GenericSource::onPrepareAsync() {
         } else {
             mIsWidevine = false;
 
+            Mutex::Autolock _l(mSourceLock);
             mDataSource = new FileSource(mFd, mOffset, mLength);
             mFd = -1;
         }
@@ -564,11 +567,11 @@ void NuPlayer::GenericSource::disconnect() {
 
     if (dataSource != NULL) {
         // disconnect data source
-        if (mDataSource->flags() & DataSource::kIsCachingDataSource) {
-            static_cast<NuCachedSource2 *>(mDataSource.get())->disconnect();
+        if (dataSource->flags() & DataSource::kIsCachingDataSource) {
+            static_cast<NuCachedSource2 *>(dataSource.get())->disconnect();
         }
-    } else if (mHttpSource != NULL) {
-        static_cast<HTTPBase *>(mHttpSource.get())->disconnect();
+    } else if (httpSource != NULL) {
+        static_cast<HTTPBase *>(httpSource.get())->disconnect();
     }
 }
 
