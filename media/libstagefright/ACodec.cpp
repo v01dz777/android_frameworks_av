@@ -82,6 +82,7 @@
 #include <media/stagefright/PersistentSurface.h>
 #include <media/stagefright/SurfaceUtils.h>
 #include <media/stagefright/FFMPEGSoftCodec.h>
+#include <media/stagefright/Utils.h>
 
 #include <media/hardware/HardwareAPI.h>
 
@@ -4364,6 +4365,7 @@ status_t ACodec::getPortFormat(OMX_U32 portIndex, sp<AMessage> &notify) {
                     notify->setInt32("channel-count", params.nChannels);
                     notify->setInt32("sample-rate", params.nSamplingRate);
                     notify->setInt32("bits-per-sample", params.nBitPerSample);
+                    notify->setInt32("pcm-format", getPCMFormat(notify));
 
                     if (mChannelMaskPresent) {
                         notify->setInt32("channel-mask", mChannelMask);
