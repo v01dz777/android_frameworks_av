@@ -2091,7 +2091,7 @@ status_t ACodec::configureCodec(
         } else {
             int32_t bitsPerSample = 16;
             msg->findInt32("bit-width", &bitsPerSample);
-            err = setupRawAudioFormat(
+            err = setupRawAudioFormatInternal(
                     encoder ? kPortIndexInput : kPortIndexOutput,
                     sampleRate,
                     numChannels, bitsPerSample);
@@ -2226,7 +2226,7 @@ status_t ACodec::configureCodec(
         } else {
             int32_t bitsPerSample = 16;
             msg->findInt32("bit-width", &bitsPerSample);
-            err = setupRawAudioFormat(kPortIndexInput, sampleRate, numChannels, bitsPerSample);
+            err = setupRawAudioFormatInternal(kPortIndexInput, sampleRate, numChannels, bitsPerSample);
         }
     } else if (!strncmp(mComponentName.c_str(), "OMX.google.", 11)
             && !strcasecmp(mime, MEDIA_MIMETYPE_AUDIO_AC3)) {
@@ -2568,7 +2568,7 @@ status_t ACodec::setupAACCodec(
 
 status_t ACodec::setupAC3Codec(
         bool encoder, int32_t numChannels, int32_t sampleRate, int32_t bitsPerSample) {
-    status_t err = setupRawAudioFormat(
+    status_t err = setupRawAudioFormatInternal(
             encoder ? kPortIndexInput : kPortIndexOutput, sampleRate, numChannels, bitsPerSample);
 
     if (err != OK) {
@@ -2606,7 +2606,7 @@ status_t ACodec::setupAC3Codec(
 
 status_t ACodec::setupEAC3Codec(
         bool encoder, int32_t numChannels, int32_t sampleRate, int32_t bitsPerSample) {
-    status_t err = setupRawAudioFormat(
+    status_t err = setupRawAudioFormatInternal(
             encoder ? kPortIndexInput : kPortIndexOutput, sampleRate, numChannels, bitsPerSample);
 
     if (err != OK) {
@@ -2753,6 +2753,11 @@ status_t ACodec::setupFlacCodec(
 }
 
 status_t ACodec::setupRawAudioFormat(
+        OMX_U32 portIndex, int32_t sampleRate, int32_t numChannels) {
+    return setupRawAudioFormatInternal(portIndex, sampleRate, numChannels, 16);
+}
+
+status_t ACodec::setupRawAudioFormatInternal(
         OMX_U32 portIndex, int32_t sampleRate, int32_t numChannels, int32_t bitsPerSample) {
     OMX_PARAM_PORTDEFINITIONTYPE def;
     InitOMXParams(&def);
