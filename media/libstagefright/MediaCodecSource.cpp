@@ -771,9 +771,11 @@ status_t MediaCodecSource::onStart(MetaData *params) {
     status_t err = OK;
 
     if (mFlags & FLAG_USE_SURFACE_INPUT) {
-        auto key = kKeyTime;
-        if (!property_get_bool("media.camera.ts.monotonic", true)) {
-            key = kKeyTimeBoot;
+        auto key = kKeyTimeBoot;
+        char value[PROPERTY_VALUE_MAX];
+        if (property_get("media.camera.ts.monotonic", value, "0") &&
+            atoi(value)) {
+            key = kKeyTime;
         }
 
         int64_t startTimeUs;
@@ -885,7 +887,7 @@ void MediaCodecSource::onMessageReceived(const sp<AMessage> &msg) {
             MediaBuffer *mbuf = new MediaBuffer(outbuf->size());
             mbuf->setObserver(this);
             mbuf->add_ref();
-            
+
             sp<MetaData> meta = mbuf->meta_data();
             AVUtils::get()->setDeferRelease(meta);
 
