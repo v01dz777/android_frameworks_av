@@ -86,13 +86,13 @@ public:
 
     status_t updateOutputAudioSessionInfo(audio_io_handle_t output,
                              audio_stream_type_t stream,
-                             audio_session_t audioSession,
+                             int audioSession,
                              audio_output_flags_t flags,
                              audio_channel_mask_t channelMask, uid_t uid);
 
     status_t releaseOutputAudioSessionInfo(audio_io_handle_t output,
                              audio_stream_type_t stream,
-                             audio_session_t audioSession);
+                             int audioSession);
 
     status_t listAudioSessions(audio_stream_type_t streams,
                              Vector< sp<AudioSessionInfo>> &sessions);
@@ -205,7 +205,7 @@ private:
     // Automatic output effects are unique for audiosession ID
     KeyedVector< audio_session_t, EffectVector* > mOutputSessions;
     // Stream info for session events
-    KeyedVector< audio_session_t, sp<AudioSessionInfo> > mOutputAudioSessionInfo;
+    KeyedVector< int32_t, sp<AudioSessionInfo> > mOutputAudioSessionInfo;
 
     AudioPolicyService *mAudioPolicyService;
 };
