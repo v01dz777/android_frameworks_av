@@ -786,7 +786,6 @@ status_t BnOMX::onTransact(
                                         err = getParameter(node, index, params, size);
                                         break;
                                     case SET_PARAMETER:
-                                        AVMediaUtils::get()->readCustomParamData(index, params, size, &data);
                                         err = setParameter(node, index, params, size);
                                         break;
                                     case GET_CONFIG:
