@@ -428,7 +428,7 @@ void SurfaceMediaSource::signalBufferReturned(MediaBuffer *buffer) {
 
     for (size_t i = 0; i < mCurrentBuffers.size(); i++) {
 #ifdef CAMCORDER_GRALLOC_SOURCE
-          if (mCurrentBuffers[i]->handle == bufferHandle) {
+        if (mCurrentBuffers[i]->handle == bufferHandle) {
 #else
         if ((buffer_handle_t)mCurrentBuffers[i]->getNativeBuffer() == bufferHandle) {
 #endif
@@ -448,7 +448,7 @@ void SurfaceMediaSource::signalBufferReturned(MediaBuffer *buffer) {
         }
 
 #ifdef CAMCORDER_GRALLOC_SOURCE
-          if (bufferHandle == mSlots[id].mGraphicBuffer->handle) {
+        if (bufferHandle == mSlots[id].mGraphicBuffer->handle) {
 #else
         if (bufferHandle == (buffer_handle_t)mSlots[id].mGraphicBuffer->getNativeBuffer()) {
 #endif
