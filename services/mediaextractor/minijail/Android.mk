@@ -16,12 +16,15 @@ else
     LOCAL_SRC_FILES += $(LOCAL_PATH)/seccomp_policy/mediaextractor-seccomp-$(TARGET_ARCH)-cm.policy
 endif
 
+# add cm policy for all devices
+LOCAL_SRC_FILES += $(LOCAL_PATH)/seccomp_policy/mediaextractor-seccomp-cm.policy
+
 # allow device specific additions to the syscall whitelist
 ifneq (,$(wildcard $(BOARD_SECCOMP_POLICY)/mediaextractor-seccomp.policy))
     LOCAL_SRC_FILES += $(BOARD_SECCOMP_POLICY)/mediaextractor-seccomp.policy
 endif
 
-#include $(BUILD_SYSTEM)/base_rules.mk
+include $(BUILD_SYSTEM)/base_rules.mk
 
 $(LOCAL_BUILT_MODULE): $(LOCAL_SRC_FILES)
 	@mkdir -p $(dir $@)

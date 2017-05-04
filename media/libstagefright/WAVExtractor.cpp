@@ -30,6 +30,7 @@
 #include <media/stagefright/MetaData.h>
 #include <utils/String8.h>
 #include <cutils/bitops.h>
+#include <system/audio.h>
 
 #define CHANNEL_MASK_USE_CHANNEL_ORDER 0
 
@@ -291,6 +292,12 @@ status_t WAVExtractor::init() {
                     case WAVE_FORMAT_IEEE_FLOAT:
                         mTrackMeta->setCString(
                                 kKeyMIMEType, MEDIA_MIMETYPE_AUDIO_RAW);
+                        if (mWaveFormat == WAVE_FORMAT_IEEE_FLOAT) {
+                            mTrackMeta->setInt32(kKeyPcmEncoding, kAudioEncodingPcmFloat);
+                        } else {
+                            mTrackMeta->setInt32(kKeyPcmEncoding,
+                                    bitsToAudioEncoding(mBitsPerSample));
+                        }
                         break;
                     case WAVE_FORMAT_ALAW:
                         mTrackMeta->setCString(
@@ -375,9 +382,10 @@ WAVSource::~WAVSource() {
 }
 
 status_t WAVSource::start(MetaData * /* params */) {
-    ALOGV("WAVSource::start");
 
-    CHECK(!mStarted);
+    if (mStarted) {
+        return OK;
+    }
 
     // some WAV files may have large audio buffers that use shared memory transfer.
     mGroup = new MediaBufferGroup(4 /* buffers */, kMaxFrameSize);
@@ -450,6 +458,8 @@ status_t WAVSource::read(
     size_t maxBytesToRead =
         mBitsPerSample == 8 ? kMaxFrameSize / 2 : 
         (mBitsPerSample == 24 ? 3*(kMaxFrameSize/3): kMaxFrameSize);
+    ALOGV("%s mBitsPerSample %d, kMaxFrameSize %zu, ",
+          __func__, mBitsPerSample, kMaxFrameSize);
 
     size_t maxBytesAvailable =
         (mCurrentPos - mOffset >= (off64_t)mSize)

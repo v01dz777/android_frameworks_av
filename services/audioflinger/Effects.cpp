@@ -1826,6 +1826,7 @@ size_t AudioFlinger::EffectChain::removeEffect_l(const sp<EffectModule>& effect,
                 effect->setSuspended(false);
             }
 #endif // DOLBY_END
+
             break;
         }
     }
